@@ -84,6 +84,17 @@
             .time-btn:hover{
                 background-color: #4b88c0;
             }
+            .dashboard{
+                margin-top:5px;
+                padding:10px;
+                background:#ffffff;
+                border-radius:10px;
+                color:#333;
+                font-weight:bold;
+            }
+            .dashboard h3{
+                margin:0 0 10px 0;
+            }
         </style>
     </head>
     <body>
@@ -100,6 +111,12 @@
             <div style="font-size:1rem;font-weight:bold;color:#8a8888;margin-bottom:20px">
                 Best CPS: <span id="best-cps-label">0.00</span>
             </div>
+            <div class="dashboard">
+                <h3>Stats</h3>
+                <div> Games Played: <span id="games-label">0</span></div>
+                <div>Total Clicks: <span id="total-clicks-label">0</span></div>
+                <div>Average CPS: <span id="avg-cps-label">0.00</span></div>
+            </div>
             <div style="margin-bottom:20px;">
                 <button class="time-btn" onclick="setTime(5)">5 Seconds</button>
                 <button class="time-btn" onclick="setTime(10)">10 Seconds</button>
@@ -115,6 +132,9 @@
             const rBtn=document.getElementById('reset-btn');
             const cpsLabel=document.getElementById('cps-label');
             const bestCPSLabel=document.getElementById('best-cps-label');
+            const gamesLabel=document.getElementById('games-label');
+            const totalClicksLabel=document.getElementById('total-clicks-label');
+            const avgCPSLabel=document.getElementById('avg-cps-label');
 
             let cCount=0;
             let tLeft=5;
@@ -123,7 +143,15 @@
             let startTime;
             let gameLength=5;
             let bestCPS=localStorage.getItem("bestCPS") || 0;
+            let gamesPlayed=Number(localStorage.getItem("gamesPlayed")) || 0;
+            let totalClicks=Number(localStorage.getItem("totalClicks")) || 0;
+            let totalCPS=Number(localStorage.getItem("totalCP")) || 0;
             bestCPSLabel.textContent=Number(bestCPS).toFixed(2);
+            gamesLabel.textContent=gamesPlayed;
+            totalClicksLabel.textContent=totalClicks;
+
+            let averageCPS=gamesPlayed > 0 ? totalCPS/gamesPlayed : 0;
+            avgCPSLabel.textContent=averageCPS.toFixed(2);
             function setTime(seconds){
                 if(!gActive){
                     gameLength=seconds;
@@ -171,6 +199,15 @@
                     bestCPSLabel.textContent=Number(bestCPS).toFixed(2);
                 }
                 cpsLabel.textContent=cps;
+                gamesPlayed++;
+                totalClicks += cCount;
+                totalCPS += Number(cps);
+                localStorage.setItem("gamesPlayed",gamesPlayed);
+                localStorage.setItem("totalClicks",totalClicks);
+                localStorage.setItem("totalCPS",totalCPS);
+                gamesLabel.textContent=gamesPlayed;
+                totalClicksLabel.textContent=totalClicks;
+                avgCPSLabel.textContent=(totalCPS/gamesPlayed).toFixed(2);
                 cZone.textContent=`Finished! CPS: ${cps}`;
                 rBtn.style.display="inline-block";
             }
