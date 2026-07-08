@@ -79,7 +79,7 @@
             <h1>CPS Test</h1>
             <p>Click the box below as fast as you can using left-click!</p>
             <div class="stats">
-                <div>Time Left: <span id="timer-label">5</span></div>
+                <div>Time Left: <span id="timer-label">5.00</span></div>
                 <div>Clicks: <span id="click-label">0</span></div>
             </div>
             <div style="font-size:1.2rem;font-weight:bold;color:#000000;margin-bottom:20px">
@@ -100,6 +100,7 @@
             let gActive=false;
             let cdInt;
             let startTime;
+            const gameLength=5;
             cZone.addEventListener('click',function(){
                 if(!gActive && cCount===0){
                     startGame();
@@ -117,18 +118,20 @@
                 startTime=Date.now();
                 cZone.textContent="CLICK CLICK CLICK";
                 cdInt=setInterval(function(){
-                    tLeft--;
-                    tLabel.textContent=tLeft;
+                    let elapsed=(Date.now()-startTime)/1000;
+                    tLeft=Math.max(0,gameLength-elapsed);
+                    tLabel.textContent=tLeft.toFixed(2);
                     if(tLeft<=0){
-                        endGame();
+                        endGame;
                     }
-                },1000);
+                },16);
             }
             function endGame(){
                 gActive=false;
                 clearInterval(cdInt);
                 cZone.disabled=true;
                 let elapsed=(Date.now()-startTime)/1000;
+                elapsed=Math.min(elapsed,gameLength);
                 let cps=(cCount/elapsed).toFixed(2);
                 cpsLabel.textContent=cps;
                 cZone.textContent=`Finished! CPS: ${cps}`;
@@ -136,11 +139,11 @@
             }
             rBtn.addEventListener('click',function(){
                 cCount=0;
-                tLeft=5;
+                tLeft=gameLength;
                 gActive=false;
                 cLabel.textContent="0";
                 cpsLabel.textContent="0.00";
-                tLabel.textContent="5";
+                tLabel.textContent=gameLength.toFixed(2);
                 cZone.textContent="Click here to start!";
                 cZone.disabled=false;
                 rBtn.style.display="none";
