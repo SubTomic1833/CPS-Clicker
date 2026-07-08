@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8";
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Simple CPS Test</title>
+        <style>
+            body{
+                font-family:'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f0f2f5;
+                display:flex;
+                flex-direction:column;
+                align-items:center;
+                justify-content:center;
+                height:100vh;
+                margin:0;
+            }
+            .game-container{
+                background-color: white;
+                padding:30px;
+                border-radius:12px;
+                box-shadow:0 4px 15px rgba(0,0,0,0.1);
+                text-align:center;
+                width:350px;
+            }
+            ht{
+                color:#333;
+                margin-bottom:5px;
+            }
+            .stats{
+                display:flex;
+                justify-content: space-around;
+                margin:20px 0;
+                font-size:1.1rem;
+                font-weight:bold;
+                color:#555;
+            }
+            #click-zone{
+                background-color:#007bff;
+                color:white;
+                border:none;
+                border-radius:7px;
+                width:100%;
+                padding:50px 0;
+                font-size:1.5rem;
+                font-weight:bold;
+                cursor:pointer;
+                transition:background-color 0.1s, transform 0.05s;
+                user-select:none;
+            }
+            #click-zone:hover{
+                background-color: #0056b3;
+            }
+            #click-zone:active{
+                transform:scale(0.98);
+            }
+            #click-zone:disabled{
+                background-color:#6c757d;
+                cursor:not-allowed;
+                transform: none;
+            }
+            #reset-btn{
+                margin-top:20px;
+                background-color:#28a745;
+                color:white;
+                border:none;
+                padding:10px 20px;
+                font-size:1rem;
+                border-radius:5px;
+                cursor:pointer;
+            }
+            #reset-btn:hover{
+                background-color:#218838
+            }
+        </style>
+    </head>
+    <body>
+        <div class="game-container">
+            <h1>CPS Test</h1>
+            <p>Click the box below as fast as you can using left-click!</p>
+            <div class="stats">
+                <div>Time Left: <span id="timer-label">5</span></div>
+                <div>Clicks: <span id=click-label">0</span></div>
+            </div>
+            <button id="click-zone">Click here to start!</button>
+            <button id="reset-btn" style="display:none;">Play Again</button>
+        </div>
+        <script>
+            const cZone=document.getElementById('click-zone');
+            const tLabel=document.getElementById('timer-label');
+            const cLabel=document.getElementById('click-label');
+            const rBtn=document.getElementById('reset-btn');
+
+            let cCount=0;
+            let tLeft=5;
+            let gActive=false;
+            let cdInt;
+            cZone.addEventListener('click',function(){
+                if(!gActive && cCount===0){
+                    startGame();
+                }
+                if(gActive){
+                    cCount++;
+                    cLabel.textContent=cCount;
+                }
+            });
+            function startGame(){
+                gActive=true;
+                cZone.textContent="CLICK CLICK CLICK";
+                cdInt=setInterval(function(){
+                    tLeft--;
+                    tLabel.textContent=tLeft;
+                    if(tLeft<=0){
+                        endGame();
+                    }
+                },1000);
+            }
+            function endGame(){
+                gActive=false;
+                clearInterval(cdInt);
+                cZone.disabled=true;
+                let cps=(cCount/5).toFixed(2);
+                cZone.textContent=`Finished! CPS: ${cps}`;
+                rBtn.style.display="inline-block";
+            }
+            rBtn.addEventListener('click',function(){
+                tLeft=0;
+                gActive=false;
+                cLabel.textContent="0";
+                tLabel=textContent="5";
+                cZone.textContent="Click here to start!";
+                cZone.disabled=false;
+                rBtn.style.display="none";
+            });
+
+        </script>
+    </body>
+</html>
