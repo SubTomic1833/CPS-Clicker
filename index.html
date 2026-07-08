@@ -72,6 +72,18 @@
             #reset-btn:hover{
                 background-color:#218838
             }
+            #time-btn{
+                background-color:#444;
+                color:white;
+                border:none;
+                padding:8px 12px;
+                margin:3px;
+                border-radius:5px;
+                cursor:pointer;
+            }
+            .time-btn:hover{
+                background-color: #4b88c0;
+            }
         </style>
     </head>
     <body>
@@ -87,6 +99,11 @@
             </div>
             <div style="font-size:1rem;font-weight:bold;color:#8a8888;margin-bottom:20px">
                 Best CPS: <span id="best-cps-label">0.00</span>
+            </div>
+            <div style="margin-bottom:20px;">
+                <button class="time-btn" onclick="setTime(5)">5 Seconds</button>
+                <button class="time-btn" onclick="setTime(10)">10 Seconds</button>
+                <button class="time-btn" onclick="setTime(15)">15 Seconds</button>
             </div>
             <button id="click-zone">Click here to start!</button>
             <button id="reset-btn" style="display:none;">Play Again</button>
@@ -104,9 +121,16 @@
             let gActive=false;
             let cdInt;
             let startTime;
-            const gameLength=5;
+            let gameLength=5;
             let bestCPS=localStorage.getItem("bestCPS") || 0;
             bestCPSLabel.textContent=Number(bestCPS).toFixed(2);
+            function setTime(seconds){
+                if(!active){
+                    gameLength=seconds;
+                    tLeft=gameLength;
+                    tLabel.textContent=gameLength.toFixed(2);
+                }
+            }
             cZone.addEventListener('click',function(){
                 if(!gActive && cCount===0){
                     startGame();
@@ -120,17 +144,18 @@
                 }
             });
             function startGame(){
-                gActive=true;
-                startTime=Date.now();
-                cZone.textContent="CLICK CLICK CLICK";
-                cdInt=setInterval(function(){
-                    let elapsed=(Date.now()-startTime)/1000;
-                    tLeft=Math.max(0,gameLength-elapsed);
-                    tLabel.textContent=tLeft.toFixed(2);
-                    if(tLeft<=0){
-                        endGame();
-                    }
-                },16);
+                if(!gActive){
+                    startTime=Date.now();
+                    cZone.textContent="CLICK CLICK CLICK";
+                    cdInt=setInterval(function(){
+                        let elapsed=(Date.now()-startTime)/1000;
+                        tLeft=Math.max(0,gameLength-elapsed);
+                        tLabel.textContent=tLeft.toFixed(2);
+                        if(tLeft<=0){
+                            endGame();
+                        }
+                    },16);
+                }    
             }
             function endGame(){
                 gActive=false;
