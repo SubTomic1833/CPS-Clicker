@@ -7,7 +7,7 @@
         <style>
             body{
                 font-family:'Segoe UI', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                background-color: #f0f2f5;
+                background-color: #333;
                 display:flex;
                 flex-direction:column;
                 align-items:center;
@@ -19,7 +19,7 @@
                 background-color: white;
                 padding:30px;
                 border-radius:12px;
-                box-shadow:0 4px 15px rgba(0,0,0,0.1);
+                box-shadow:0 4px 15px rgba(255,255,255,0.85);
                 text-align:center;
                 width:350px;
             }
@@ -99,6 +99,7 @@
             let tLeft=5;
             let gActive=false;
             let cdInt;
+            let startTime;
             cZone.addEventListener('click',function(){
                 if(!gActive && cCount===0){
                     startGame();
@@ -106,16 +107,14 @@
                 if(gActive){
                     cCount++;
                     cLabel.textContent=cCount;
-                    let elapsed=5-tLeft;
-                    if(elapsed===0){
-                        elapsed=1;
-                    }
+                    let elapsed=(Date.now()-startTime)/1000;
                     let liveCPS=(cCount/elapsed).toFixed(2);
                     cpsLabel.textContent=liveCPS;
                 }
             });
             function startGame(){
                 gActive=true;
+                startTime=Date.now();
                 cZone.textContent="CLICK CLICK CLICK";
                 cdInt=setInterval(function(){
                     tLeft--;
@@ -129,7 +128,8 @@
                 gActive=false;
                 clearInterval(cdInt);
                 cZone.disabled=true;
-                let cps=(cCount/5).toFixed(2);
+                let elapsed=(Date.now()-startTime)/1000;
+                let cps=(cCount/elapsed).toFixed(2);
                 cpsLabel.textContent=cps;
                 cZone.textContent=`Finished! CPS: ${cps}`;
                 rBtn.style.display="inline-block";
