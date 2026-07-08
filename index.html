@@ -85,6 +85,9 @@
             <div style="font-size:1.2rem;font-weight:bold;color:#000000;margin-bottom:20px">
                 Live CPS: <span id="cps-label">0.00</span> 
             </div>
+            <div style="font-size:1rem;font-weight:bold;color:#8a8888;margin-bottom:20px">
+                Best CPS: <span id="best-cps-label">0.00</span>
+            </div>
             <button id="click-zone">Click here to start!</button>
             <button id="reset-btn" style="display:none;">Play Again</button>
         </div>
@@ -94,6 +97,7 @@
             const cLabel=document.getElementById('click-label');
             const rBtn=document.getElementById('reset-btn');
             const cpsLabel=document.getElementById('cps-label');
+            const bestCPSLabel=document.getElementById('best-cps-label');
 
             let cCount=0;
             let tLeft=5;
@@ -101,6 +105,8 @@
             let cdInt;
             let startTime;
             const gameLength=5;
+            let bestCPS=localStorage.getItem("bestCPS") || 0;
+            bestCPSLabel.textContent=Number(bestCPS).toFixed(2);
             cZone.addEventListener('click',function(){
                 if(!gActive && cCount===0){
                     startGame();
@@ -122,7 +128,7 @@
                     tLeft=Math.max(0,gameLength-elapsed);
                     tLabel.textContent=tLeft.toFixed(2);
                     if(tLeft<=0){
-                        endGame;
+                        endGame();
                     }
                 },16);
             }
@@ -133,6 +139,11 @@
                 let elapsed=(Date.now()-startTime)/1000;
                 elapsed=Math.min(elapsed,gameLength);
                 let cps=(cCount/elapsed).toFixed(2);
+                if(Number(cps)>Number(bestCPS)){
+                    bestCPS=cps;
+                    localStorage.setItem("bestCPS",bestCps);
+                    bestCPSLabel.textContent=Number(bestCPS).toFixed(2);
+                }
                 cpsLabel.textContent=cps;
                 cZone.textContent=`Finished! CPS: ${cps}`;
                 rBtn.style.display="inline-block";
