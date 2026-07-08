@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <meta charset="UTF-8";
+        <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Simple CPS Test</title>
         <style>
@@ -23,7 +23,7 @@
                 text-align:center;
                 width:350px;
             }
-            ht{
+            h1{
                 color:#333;
                 margin-bottom:5px;
             }
@@ -80,7 +80,7 @@
             <p>Click the box below as fast as you can using left-click!</p>
             <div class="stats">
                 <div>Time Left: <span id="timer-label">5</span></div>
-                <div>Clicks: <span id=click-label">0</span></div>
+                <div>Clicks: <span id="click-label">0</span></div>
             </div>
             <button id="click-zone">Click here to start!</button>
             <button id="reset-btn" style="display:none;">Play Again</button>
@@ -124,10 +124,11 @@
                 rBtn.style.display="inline-block";
             }
             rBtn.addEventListener('click',function(){
-                tLeft=0;
+                cCount=0;
+                tLeft=5;
                 gActive=false;
                 cLabel.textContent="0";
-                tLabel=textContent="5";
+                tLabel.textContent="5";
                 cZone.textContent="Click here to start!";
                 cZone.disabled=false;
                 rBtn.style.display="none";
