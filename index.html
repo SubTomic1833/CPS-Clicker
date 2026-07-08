@@ -72,7 +72,7 @@
             #reset-btn:hover{
                 background-color:#218838
             }
-            #time-btn{
+            .time-btn{
                 background-color:#444;
                 color:white;
                 border:none;
@@ -125,7 +125,7 @@
             let bestCPS=localStorage.getItem("bestCPS") || 0;
             bestCPSLabel.textContent=Number(bestCPS).toFixed(2);
             function setTime(seconds){
-                if(!active){
+                if(!gActive){
                     gameLength=seconds;
                     tLeft=gameLength;
                     tLabel.textContent=gameLength.toFixed(2);
@@ -145,6 +145,7 @@
             });
             function startGame(){
                 if(!gActive){
+                    gActive=true;
                     startTime=Date.now();
                     cZone.textContent="CLICK CLICK CLICK";
                     cdInt=setInterval(function(){
