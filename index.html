@@ -82,6 +82,9 @@
                 <div>Time Left: <span id="timer-label">5</span></div>
                 <div>Clicks: <span id="click-label">0</span></div>
             </div>
+            <div style="font-size:1.2rem;font-weight:bold;color:#000000;margin-bottom:20px">
+                Live CPS: <span id="cps-label">0.00</span> 
+            </div>
             <button id="click-zone">Click here to start!</button>
             <button id="reset-btn" style="display:none;">Play Again</button>
         </div>
@@ -90,6 +93,7 @@
             const tLabel=document.getElementById('timer-label');
             const cLabel=document.getElementById('click-label');
             const rBtn=document.getElementById('reset-btn');
+            const cpsLabel=document.getElementById('cps-label');
 
             let cCount=0;
             let tLeft=5;
@@ -102,6 +106,12 @@
                 if(gActive){
                     cCount++;
                     cLabel.textContent=cCount;
+                    let elapsed=5-tLeft;
+                    if(elapsed===0){
+                        elapsed=1;
+                    }
+                    let liveCPS=(cCount/elapsed).toFixed(2);
+                    cpsLabel.textContent=liveCPS;
                 }
             });
             function startGame(){
@@ -120,6 +130,7 @@
                 clearInterval(cdInt);
                 cZone.disabled=true;
                 let cps=(cCount/5).toFixed(2);
+                cpsLabel.textContent=cps;
                 cZone.textContent=`Finished! CPS: ${cps}`;
                 rBtn.style.display="inline-block";
             }
@@ -128,6 +139,7 @@
                 tLeft=5;
                 gActive=false;
                 cLabel.textContent="0";
+                cpsLabel.textContent="0.00";
                 tLabel.textContent="5";
                 cZone.textContent="Click here to start!";
                 cZone.disabled=false;
